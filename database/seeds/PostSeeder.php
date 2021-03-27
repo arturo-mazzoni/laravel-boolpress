@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
 use App\Post;
+use App\User;
 use Illuminate\Support\Str;
 
 class PostSeeder extends Seeder
@@ -18,6 +19,9 @@ class PostSeeder extends Seeder
             $newPost = new Post();
             $newPost->title = $faker->sentence(3);
             $newPost->content = $faker->text(500);
+
+            $userCount = Count(User::all()->toArray());
+            $newPost->user_id = rand(1,$userCount);
 
             $slug = Str::slug($newPost->title);
             $slugIniziale = $slug;

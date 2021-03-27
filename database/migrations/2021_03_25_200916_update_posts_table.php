@@ -14,7 +14,7 @@ class UpdatePostsTable extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
+            // $table->unsignedBigInteger('user_id');
             $table->foreignId('user_id')->constrained();
         });
     }
@@ -28,7 +28,7 @@ class UpdatePostsTable extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             //questa riga cancella la relazione
-            $table->dropForeign('posts_user_id_foreign');
+            $table->dropForeign(['user_id'])->after('id');
 
             //questa riga cancella la colonna
             $table->dropColumn('user_id');

@@ -16,6 +16,8 @@
 
                     {{ __('You are logged in!') }}
                 </div>
+
+                <a href="{{ route('post.index') }}">area amministrativa</a>
             </div>
         </div>
     </div>

@@ -10,7 +10,7 @@
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Tile</th>
-          <th scope="col">user Id</th>
+          <th scope="col">Slug</th>
           <th scope="col">Content</th>
           <th scope="col">Created at</th>
           <th scope="col">Updated at</th>

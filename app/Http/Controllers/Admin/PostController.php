@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -15,10 +17,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::all();
+        $posts = Post::all();
 
         $data = [
-            'posts' => $post
+            'posts' => $posts
         ];
 
         return view('admin.post.index', $data);
@@ -44,14 +46,20 @@ class PostController extends Controller
     {
         $data = $request->all();
 
+        $idUser = auth::id();
+
         $postNew = new Post();
+        $postNew->user_id = $idUser;
+        $postNew->slug = Str::slug($data['title']);
+
         $postNew->fill($data);
         // $postNew->title = ['title'];
         // $postNew->title = ['slug'];
         // $postNew->title = ['content'];
+        
         $postNew->save();
 
-        return redirect()->route('post.show');
+        return redirect()->route('post.index');
     }
 
     /**
@@ -82,9 +90,18 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        if ($post) {
+
+            $data = [
+                'post' => $post
+            ];
+    
+            return view('admin.post.edit', $data);
+        }
+
+        abort('404');
     }
 
     /**
@@ -94,9 +111,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $data = $request->all();
+
+        $post->update($data);
+
+        return redirect()->route('post.show',$post);
     }
 
     /**
@@ -105,8 +126,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->route('post.index');
     }
 }

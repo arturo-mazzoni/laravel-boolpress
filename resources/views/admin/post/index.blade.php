@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'index cars')
+@section('title', 'index posts')
 
 @section('content')
 
-  <h1>Elenco Automobili</h1>
   <div class="container">
     <a href="{{ route('post.create') }}">crea un nuovo post</a>
     <table class="table">
@@ -12,7 +11,7 @@
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Tile</th>
-          <th scope="col">user Id</th>
+          <th scope="col">Slug</th>
           <th scope="col">content</th>
           <th scope="col">Operations</th>
         </tr>
@@ -27,7 +26,7 @@
             <td>
               <a href="{{ route('post.show', $post->id) }}" class="btn btn-info">Dettagli</a>
               <a href="{{ route('post.edit', $post->id) }}" class="btn btn-warning">Modifica</a>
-              <form action="{{ route('post.destroy', $post->id) }}" method="post" class="d-inline-block">
+              <form action="{{ route('post.destroy', $post->id) }}" method="post">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-danger">Delete</button>

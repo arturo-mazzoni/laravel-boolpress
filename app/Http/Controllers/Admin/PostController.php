@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Tag;
+
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -33,7 +35,12 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.post.create');
+        $tags = Tag::all();
+
+        $data = [
+            'tags' => $tags
+        ];
+        return view('admin.post.create', $data);
     }
 
     /**
@@ -53,11 +60,15 @@ class PostController extends Controller
         $postNew->slug = Str::slug($data['title']);
 
         $postNew->fill($data);
-        // $postNew->title = ['title'];
-        // $postNew->title = ['slug'];
-        // $postNew->title = ['content'];
+        // $postNew->title = $data['title'];
+        // $postNew->title = $data['slug'];
+        // $postNew->title = $data['content'];
         
         $postNew->save();
+
+        if (array_key_exists('tags',$data)) {
+            $postNew->tags()->sync($data['tags']);
+        }
 
         return redirect()->route('post.index');
     }
@@ -94,8 +105,12 @@ class PostController extends Controller
     {
         if ($post) {
 
+            $tags = Tag::all();
+
+
             $data = [
-                'post' => $post
+                'post' => $post,
+                'tags' => $tags
             ];
     
             return view('admin.post.edit', $data);
@@ -113,9 +128,12 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $data = $request->all();
 
-        $post->update($data);
+        $data = $request->all();
+        $post->slug = Str::slug($data['title']);
+
+        $post->fill($data);
+        $post->save();
 
         return redirect()->route('post.show',$post);
     }
